@@ -24,8 +24,8 @@ weight1 = tf.get_variable("weight1", shape=[113, 150], initializer=tf.contrib.la
 bias1 = tf.get_variable("bias1", shape=[150], initializer=tf.contrib.layers.xavier_initializer())
 hidden_layer_1 = tf.nn.relu(tf.matmul(input_placeholder, weight1) + bias1)
 
-weight2 = tf.get_variable("weight2", shape=[113, 125], initializer=tf.contrib.layers.xavier_initializer())
-bias2 = tf.get_variable("bias2", shape=[150], initializer=tf.contrib.layers.xavier_initializer())
+weight2 = tf.get_variable("weight2", shape=[150, 125], initializer=tf.contrib.layers.xavier_initializer())
+bias2 = tf.get_variable("bias2", shape=[125], initializer=tf.contrib.layers.xavier_initializer())
 hidden_layer_2 = tf.nn.relu(tf.matmul(hidden_layer_1, weight2) + bias2)
 
 hidden_layer_3 = tf.layers.dense(hidden_layer_2, 100, activation=tf.nn.relu)
