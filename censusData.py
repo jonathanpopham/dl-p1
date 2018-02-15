@@ -38,7 +38,10 @@ logits = tf.nn.softmax(tf.layers.dense(hidden_layer_3, 2, activation=None))
 label_placeholder = tf.placeholder(tf.float32, shape=[None, 2])
 
 ## loss function
-loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=label_placeholder))
+##  is this loss?
+
+loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=label_placeholder, logits=logits))
+
 ## backpropagation algorithm
 train = tf.train.AdamOptimizer().minimize(loss)
 
@@ -58,16 +61,18 @@ with tf.Session() as sess:
 
         # train network
 
-        training_accuracy, training_loss, logits_output, _ = sess.run([accuracy, loss, logits],
-                                                                      feed_dict={input_placeholder: batch_test_data,
-                                                                                 label_placeholder: batch_test_labels})
+        training_accuracy, training_loss, logits_output, _ = sess.run([accuracy, loss, logits, train],
+                                                                      feed_dict={input_placeholder: batch_training_data,
+                                                                                label_placeholder: batch_training_labels})
 
         # every 10 steps check accuracy
         if step_count % 10 == 0:
             batch_test_data, batch_test_labels = dataUtils.getBatch(data=test_data, labels=test_labels,
                                                                             batch_size=100)
-            #test_accuracy, test_loss = sess.run(# your code)
-
+            #test_accuracy
+            test_accuracy, test_loss, logits_output = sess.run([accuracy, loss, logits],
+                                                               feed_dict={input_placeholder: batch_test_data,
+                                                                          label_placeholder: batch_test_labels})
             print("Step Count:{}".format(step_count))
             print("Training accuracy: {} loss: {}".format(training_accuracy, training_loss))
             print("Test accuracy: {} loss: {}".format(test_accuracy, test_loss))
